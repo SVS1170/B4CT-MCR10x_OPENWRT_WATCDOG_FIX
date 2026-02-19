@@ -1,0 +1,13 @@
+# --- Watchdog "Feeding" Script (PA01 / orangepi:black:wd) ---
+(
+    sleep 5
+    while true; do
+        echo 1 > /sys/class/leds/orangepi:black:wd/brightness
+        sleep 0.5
+        echo 0 > /sys/class/leds/orangepi:black:wd/brightness
+        sleep 30
+    done
+) &
+# -----------------------------------------------------------
+
+exit 0
