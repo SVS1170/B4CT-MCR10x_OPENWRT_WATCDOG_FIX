@@ -1,11 +1,19 @@
-# --- Watchdog "Feeding" Script (PA01 / orangepi:black:wd) ---
+# --- Watchdog "Feeding" Script (PA01 через прямой GPIO) ---
 (
     sleep 5
-    while true; do
-        echo 1 > /sys/class/leds/orangepi:black:wd/brightness
+    GPIO=1  # PA1 = GPIO 1 на mainline-ядре H2+/H3
+    G=/sys/class/gpio/gpio${GPIO}
+    
+    # Экспортировать GPIO, если нужно
+    [ -d "$G" ] || echo "$GPIO" > /sys/class/gpio/export
+    echo out > "$G/direction"
+    echo 0 > "$G/value"
+    
+    while :; do
+        echo 1 > "$G/value"
         sleep 0.5
-        echo 0 > /sys/class/leds/orangepi:black:wd/brightness
-        sleep 30
+        echo 0 > "$G/value"
+        sleep 29.5
     done
 ) &
 # -----------------------------------------------------------
